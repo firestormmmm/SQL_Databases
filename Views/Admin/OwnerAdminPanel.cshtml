@@ -1,0 +1,39 @@
+﻿@model ChampionshipMvc3.Models.DataContext.PlayfieldOwner
+@using ChampionshipMvc3.Resources
+
+ @using (Ajax.BeginForm("GetOwnerSchedule", "Playfield", new AjaxOptions
+    {
+        HttpMethod = "Get",
+        InsertionMode = InsertionMode.Replace,
+        UpdateTargetId = "ScheduleDiv",
+    }))
+    {
+        @Html.DropDownList("PlayfieldsList", new SelectList(Model.Playfields,"PlayfieldId","FieldType","PlayfieldId"), Strings.bgSelectPlayfield,
+        new { onchange = "$(this.form).submit();"})
+    }
+   
+    <div id="ScheduleDiv">
+
+    </div>
+    <div style="float: left">
+        @using (Ajax.BeginForm("RefreshSchedulePrevious", "Playfield", new AjaxOptions
+        {
+            HttpMethod = "Get",
+            InsertionMode = InsertionMode.Replace,
+            UpdateTargetId = "ScheduleDiv"
+        }))
+        {
+            <input type="submit" value=@Strings.bgPreviousWeek id="previous_week"/>
+        }
+    </div>
+    <div style="float: right">
+        @using (Ajax.BeginForm("RefreshScheduleNext", "Playfield", new AjaxOptions
+        {
+            HttpMethod = "Get",
+            InsertionMode = InsertionMode.Replace,
+            UpdateTargetId = "ScheduleDiv"
+        }))
+        {
+            <input type="submit" value=@Strings.bgNextWeek id="next_week"/>
+        }
+    </div>

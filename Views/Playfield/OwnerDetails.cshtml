@@ -1,0 +1,176 @@
+﻿@using  ChampionshipMvc3.Resources
+@model ChampionshipMvc3.Models.DataContext.PlayfieldOwner
+
+<link rel="stylesheet" href="../../Content/Bootstrap-Fixes.css">
+<link rel="stylesheet" href="../../Content/owner-details.css">
+<link rel="stylesheet" href="../../Content/Bootstrap-Fixes.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+<!-- Optional theme -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap-theme.min.css">
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+
+@{
+    ViewBag.Title = Model.Name;
+}
+
+<script src="https://maps.googleapis.com/maps/api/js?sensor=false" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/CustomScripts/googleMapsScriptForDetailsPage.js")" type="text/javascript"></script>
+
+<div id="ownerDeatailsBody">
+
+
+        <div id="mainCustom">
+            <label>@Html.DisplayFor(model => model.Name)</label>
+        </div>
+
+        <div id="mainCustomFieldInfo">
+            <table id="playFieldOwnerTable">
+                <tr>
+                    <td>
+                        @{
+                            string image = "";
+                            if(Model.Pictures != null && Model.Pictures.Count != 0)
+                            {
+                                image = Model.Pictures[0].Path;
+                            }
+                        }
+                        <img src="@image" id="playfieldOwnerImageDetails" />
+                    </td>
+                    <td>
+                        <div id="map_canvas"></div>
+                    </td>
+                    <td>
+                        <table class="ownerInformatinoNTDetails">
+                            <tr>
+                                <td><label>@Strings.bgAddress: </label></td>
+                                <td>
+                                    @Html.DisplayFor(model => model.Address)
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><label>@Strings.bgNeighbourhood: </label></td>
+                                <td>
+                                    @Html.DisplayFor(model => model.Neighbourhood)
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><label>@Strings.bgPhone: </label></td>
+                                <td>
+                                    @Html.DisplayFor(model => model.PhoneNumber)
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><label>@Strings.bgCity: </label></td>
+                                <td>
+                                    @Html.DisplayFor(model => model.City)
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><label>@Strings.bgStartHour: </label></td>
+                                <td>
+                                    @Html.DisplayFor(model => model.StartHour)
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><label>@Strings.bgEndHour: </label></td>
+                                <td>
+                                    @Html.DisplayFor(model => model.EndHour)
+                                 
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><label>@Strings.bgSmallField</label></td>
+                                <td>@Html.DisplayFor(model => model.SmallField)</td>
+                            </tr>
+                            <tr>
+                                <td><label>@Strings.bgBigField:</label> </td>
+                                <td>
+                                    @if (Model.BigField != 0)
+                                    {
+                                        @Html.DisplayFor(model => model.BigField)
+                                    }
+                                    else
+                                    {
+                                        <label>n/a</label>
+                                    }
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><label>@Strings.bgPriceLights: </label></td>
+                                <td>@Html.DisplayFor(model => model.PriceLights)</td>
+                            </tr>
+                            @if (!string.IsNullOrWhiteSpace(Model.Custom))
+                            {
+                                <tr>
+                                    <td>
+                                        <label>@Strings.bgCustom:</label>
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(model => model.Custom)
+                                    </td>
+                                </tr>
+                            }
+                            
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div id="setLat">
+                            @Html.HiddenFor(model => model.Lat)
+                        </div>
+                        <div id="setLong">
+                            @Html.HiddenFor(model => model.Long)
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    <br />
+    <br />
+    <br />
+    <div>
+       @using (Ajax.BeginForm("GetSchedule", new AjaxOptions
+       {
+           HttpMethod = "Get",
+           InsertionMode = InsertionMode.Replace,
+           UpdateTargetId = "ScheduleDiv",
+       }))
+       {
+           @Html.DropDownList("PlayfieldsList", new SelectList(Model.Playfields,"PlayfieldId","FieldType","PlayfieldId"), Strings.bgSelectPlayfield,
+           new { onchange = "$(this.form).submit();"})
+       }
+   
+        <div id="ScheduleDiv">
+
+        </div>
+
+        <div class="text-center">
+            <div class="button-container row text-center">
+                <div class="col-xs-6" >
+                    @using (Ajax.BeginForm("RefreshAnonSchedulePrevious", "Playfield", new AjaxOptions
+                {
+                    HttpMethod = "Get",
+                    InsertionMode = InsertionMode.Replace,
+                    UpdateTargetId = "ScheduleDiv"
+                }))
+                    {
+                        <input type="submit" value=@Strings.bgPreviousWeek id="previous_week" class="control-button" />
+                    }
+                </div>
+                <div class="col-xs-6" >
+                    @using (Ajax.BeginForm("RefreshAnonScheduleNext", "Playfield", new AjaxOptions
+                {
+                    HttpMethod = "Get",
+                    InsertionMode = InsertionMode.Replace,
+                    UpdateTargetId = "ScheduleDiv"
+                }))
+                    {
+                        <input type="submit" value=@Strings.bgNextWeek id="next_week" class="control-button" />
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

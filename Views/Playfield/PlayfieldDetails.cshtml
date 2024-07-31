@@ -1,0 +1,33 @@
+﻿
+@using ChampionshipMvc3.Resources
+
+@model ChampionshipMvc3.Models.DataContext.Playfield
+
+@{
+    ViewBag.Title = Model.PlayfieldName;
+}
+
+
+
+<fieldset>
+   
+
+    <div class="display-label">@Strings.bgPlayfieldName: @Html.DisplayFor(model => model.PlayfieldName)</div>
+    
+    <div class="display-label">@Strings.bgFieldType: @Html.DisplayFor(model => model.FieldType)</div>
+    
+    <div class="display-label">@Strings.bgSurface: @Html.DisplayFor(model => model.SurfaceType)</div>
+
+    <div class="display-label">@Strings.bgLength: @Html.DisplayFor(model => model.Length)</div>
+    
+    <div class="display-label">@Strings.bgWidth: @Html.DisplayFor(model => model.Width)</div>
+    
+    <div class="display-label">@Strings.bgPriceLights: @Html.DisplayFor(model => model.PriceLights)</div>
+    
+    <div class="display-label">@Strings.bgPriceNoLights: @Html.DisplayFor(model => model.PriceNoLights)</div>
+
+    <div>
+        @Html.Partial("AnonymousScheduleView", Model.Schedule)
+    </div>
+</fieldset>
+

@@ -1,0 +1,66 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>@ViewBag.Title</title>
+    <link href="../../Content/bootstrapPlayNow.css" rel="stylesheet" />
+    <link href="@Url.Content("~/Content/Site.css")" rel="stylesheet" type="text/css" />
+    <script src="@Url.Content("~/Scripts/jquery-1.7.1.min.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/jquery.unobtrusive-ajax.js")" type="text/javascript"></script>
+    <script src="../../Scripts/CustomScripts/bootstrap.minPlayNow.js"></script>
+    @using ChampionshipMvc3.Resources
+</head>
+<body>
+    
+<div id="body_container">
+    <div class="page">
+        <div id="header">
+            <div id="menucontainer">
+                <ul id="menu">
+                    <li>@Html.ActionLink(Strings.bgFields, "FootballSearchPage", "Home")</li>
+                    <li><a href="#">@Strings.bgAbout</a></li>
+                    <li><a href="#">@Strings.bgContact</a></li>
+                    <li>@Html.Partial("_LogOnPartial")</li>
+                </ul>
+            </div>
+        </div>
+        <div id="main">
+            @RenderBody()
+        </div>
+        <div id="footer">
+        </div>
+    </div>
+
+    <div class="modal fade" id="regPlayerModal" tabindex="-1" role="dialog" data-url="@Url.Action("RegisterPlayer","Account")" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    
+                </div>
+                <div id="playerContainer" class="modal-body">
+                   
+                </div>
+                <div class="modal-footer">
+                 </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="regTeamModal" tabindex="-1" role="dialog" data-url="@Url.Action("RegisterTeam","Account")" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    
+                </div>
+                <div id="teamContainer" class="modal-body">
+                   
+                </div>
+                <div class="modal-footer">
+                 </div>
+            </div>
+        </div>
+    </div>
+</div> 
+</body>
+</html>

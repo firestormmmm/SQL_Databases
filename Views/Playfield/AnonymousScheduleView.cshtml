@@ -1,0 +1,102 @@
+﻿@model ChampionshipMvc3.Models.DataContext.Playfield
+@using ChampionshipMvc3.Models.Repositories
+
+<script src="@Url.Content("~/Scripts/CustomScripts/tableFillerScheduleLayout.js")" type="text/javascript"></script>
+    
+@{
+            ReservationRepository reservationRepo = new ReservationRepository();
+            var allReservations = reservationRepo.GetPlayfieldReservations(Model.PLayfieldID);
+            DateTime displayDate = ViewBag.StartScheduleDay;
+}
+
+<table id="structureTable">
+    <tr>
+        @for (int dayIndex = 0; dayIndex < 8; dayIndex++)
+        {
+            string typeOfCell = "";
+
+            
+            <td class="inner-table-holder">
+                @if (dayIndex == 0)
+                {
+                    <label>
+                        <br />
+                        <br />
+                    </label>
+                    <table id="hoursTable">
+                        @for (int hourIndex = Model.PlayfieldOwner.StartHour; hourIndex < Model.PlayfieldOwner.EndHour; hourIndex++)
+                        {
+                            <tr>
+                                <td>
+                                    <label style="color: white; margin-left:5px; margin-right:5px">@hourIndex :00</label>
+                                </td>
+                            </tr>
+                        }
+                    </table>
+                }
+                else
+                {
+                    <label>
+                        @{
+                        var culture = new System.Globalization.CultureInfo("bg-BG");
+                        }
+                        @culture.DateTimeFormat.GetDayName(displayDate.DayOfWeek).ToUpperInvariant()
+                        <br />
+                        @displayDate.ToShortDateString()
+                    </label>
+                    
+                    <table class="inner-table">
+
+                        @for (int hourIndex = Model.PlayfieldOwner.StartHour; hourIndex < Model.PlayfieldOwner.EndHour; hourIndex++)
+                        {
+
+                            if (hourIndex == Model.PlayfieldOwner.StartHour)
+                            {
+                                typeOfCell = "first";
+                            }
+                            else if (hourIndex % 2 != 0)
+                            {
+                                typeOfCell = "not-even";
+                            }
+                            else
+                            {
+                                typeOfCell = "even";
+                            }
+
+                            bool isReserved = false;
+                            <tr>
+                                <td class="@typeOfCell" style="color: #6c6f67">
+                                    <a data-toggle="modal" href="#myModal">
+                                        @{
+                        var compareDate = DateTime.Parse(displayDate.ToShortDateString() + " " + hourIndex.ToString() + ":00");
+                        if (allReservations.Any(r => r.ReservedDateHour.Equals(compareDate)))
+                        {
+                            isReserved = true;
+                        }
+                                        }
+
+                                        @Html.Hidden("date", displayDate.ToShortDateString(), new { @class = "hiddenDateClass" })
+                                        @Html.Hidden("hour", hourIndex, new { @class = "hiddenHourClass" })
+                                    </a>
+                                    <div class="to-be-changed" style="width:100px">
+                                        @isReserved
+                                    </div>
+                                </td>
+
+                            </tr>
+                    }
+                </table>
+                }
+                
+                
+
+             
+            </td>
+            if (dayIndex != 0)
+            {
+            displayDate = displayDate.AddDays(1);
+}
+}
+    </tr>
+</table>
+
